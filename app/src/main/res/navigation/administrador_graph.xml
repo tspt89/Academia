@@ -9,5 +9,29 @@
         android:id="@+id/homeAdminFragment"
         android:name="com.tspt.academia.Administradores.HomeAdminFragment"
         android:label="fragment_home_admin"
-        tools:layout="@layout/fragment_home_admin" />
+        tools:layout="@layout/fragment_home_admin" >
+        <action
+            android:id="@+id/action_homeAdminFragment_to_productsAdminFragment"
+            app:destination="@id/productsAdminFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/productsAdminFragment"
+        android:name="com.tspt.academia.Administradores.ProductsAdminFragment"
+        android:label="fragment_products_admin"
+        tools:layout="@layout/fragment_products_admin" >
+        <action
+            android:id="@+id/action_productsAdminFragment_to_nuevoProductoFragment"
+            app:destination="@id/nuevoProductoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/nuevoProductoFragment"
+        android:name="com.tspt.academia.Administradores.NuevoProductoFragment"
+        android:label="NuevoProductoFragment"
+        tools:layout="@layout/fragment_nuevo_producto" >
+        <action
+            android:id="@+id/action_nuevoProductoFragment_to_productsAdminFragment"
+            app:destination="@id/productsAdminFragment"
+            app:popUpTo="@id/productsAdminFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>

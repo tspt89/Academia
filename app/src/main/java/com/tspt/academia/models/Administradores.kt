@@ -1,6 +1,6 @@
-package com.tspt.academia.Models
+package com.tspt.academia.models
 
-class Users {
+class Administradores {
     var uid: String = ""
     var date: String = ""
     var email: String = ""
