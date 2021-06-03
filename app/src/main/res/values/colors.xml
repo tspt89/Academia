@@ -7,4 +7,12 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+
+    <color name="admin">#A0C9E4</color>
+    <color name="instructor">#A4DFE0</color>
+    <color name="responsable">#A1E2C6</color>
+    <color name="tutor">#94F0A9</color>
+    <color name="alumno">#C7F9CC</color>
+
 </resources>

@@ -1,11 +1,10 @@
-package com.tspt.academia.Administradores
+package com.tspt.academia.Administradores.productos
 
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.tspt.academia.R

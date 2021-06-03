@@ -1,4 +1,4 @@
-package com.tspt.academia.Administradores
+package com.tspt.academia.Administradores.productos
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.tspt.academia.models.Product
 import com.tspt.academia.R
@@ -21,6 +22,7 @@ class ProductsAdminAdapter(val context: Context) : RecyclerView.Adapter<Products
         val desc : TextView = view.findViewById(R.id.descripcionProductoTV)
         val precio : TextView = view.findViewById(R.id.precioProductoTV)
         val info : ImageView = view.findViewById(R.id.infoIV)
+        val card : CardView = view.findViewById(R.id.userCardView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -32,12 +34,14 @@ class ProductsAdminAdapter(val context: Context) : RecyclerView.Adapter<Products
         val d = products[position].descripcion
         val p = products[position].precio
 
+
         holder.title.text = t
         holder.desc.text = d
         holder.precio.text = p
         holder.info.setOnClickListener {
             Toast.makeText(context, "Entra a otro fragment", Toast.LENGTH_SHORT).show()
         }
+
 
     }
 

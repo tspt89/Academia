@@ -1,4 +1,4 @@
-package com.tspt.academia.Administradores
+package com.tspt.academia.Administradores.productos
 
 import android.os.Bundle
 import android.view.View

@@ -13,10 +13,13 @@
         <action
             android:id="@+id/action_homeAdminFragment_to_productsAdminFragment"
             app:destination="@id/productsAdminFragment" />
+        <action
+            android:id="@+id/action_homeAdminFragment_to_usuariosAdminFragment"
+            app:destination="@id/usuariosAdminFragment" />
     </fragment>
     <fragment
         android:id="@+id/productsAdminFragment"
-        android:name="com.tspt.academia.Administradores.ProductsAdminFragment"
+        android:name="com.tspt.academia.Administradores.productos.ProductsAdminFragment"
         android:label="fragment_products_admin"
         tools:layout="@layout/fragment_products_admin" >
         <action
@@ -25,7 +28,7 @@
     </fragment>
     <fragment
         android:id="@+id/nuevoProductoFragment"
-        android:name="com.tspt.academia.Administradores.NuevoProductoFragment"
+        android:name="com.tspt.academia.Administradores.productos.NuevoProductoFragment"
         android:label="NuevoProductoFragment"
         tools:layout="@layout/fragment_nuevo_producto" >
         <action
@@ -34,4 +37,9 @@
             app:popUpTo="@id/productsAdminFragment"
             app:popUpToInclusive="true" />
     </fragment>
+    <fragment
+        android:id="@+id/usuariosAdminFragment"
+        android:name="com.tspt.academia.Administradores.usuarios.UsuariosAdminFragment"
+        android:label="fragment_usuarios_admin"
+        tools:layout="@layout/fragment_usuarios_admin" />
 </navigation>

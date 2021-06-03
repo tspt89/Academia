@@ -4,11 +4,10 @@ import android.content.Context
 import android.content.Intent
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.tspt.academia.models.Administradores
 
 class Utils {
     companion object {
-        val currentUser = Administradores()
+
 
         fun signOut(context: Context){
             Firebase.auth.signOut()

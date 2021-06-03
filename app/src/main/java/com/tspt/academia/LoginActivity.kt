@@ -60,13 +60,13 @@ class LoginActivity : AppCompatActivity() {
 
             user.get().addOnSuccessListener {
 
-                Utils.currentUser.email = it.child("email").getValue() as String
+                /*Utils.currentUser.email = it.child("email").getValue() as String
                 Utils.currentUser.date = it.child("date").getValue() as String
                 Utils.currentUser.name = it.child("nombre").getValue() as String
                 Utils.currentUser.telephone = it.child("telefono").getValue() as String
-                Utils.currentUser.role = (it.child("role").getValue() as Long).toInt()
+                Utils.currentUser.role = (it.child("role").getValue() as Long).toInt()*/
 
-                var role = Utils.currentUser.role
+                var role = (it.child("role").getValue() as Long).toInt()
                 when(role) {
                     1 -> {
                         val intent = Intent(this, HomeAdminActivity::class.java)
@@ -99,13 +99,13 @@ class LoginActivity : AppCompatActivity() {
 
         user.get().addOnSuccessListener {
 
-            Utils.currentUser.email = it.child("email").getValue() as String
+            /*Utils.currentUser.email = it.child("email").getValue() as String
             Utils.currentUser.date = it.child("date").getValue() as String
             Utils.currentUser.name = it.child("nombre").getValue() as String
             Utils.currentUser.telephone = it.child("telefono").getValue() as String
-            Utils.currentUser.role = (it.child("role").getValue() as Long).toInt()
+            Utils.currentUser.role = (it.child("role").getValue() as Long).toInt()*/
 
-            var role = Utils.currentUser.role
+            var role = (it.child("role").getValue() as Long).toInt()
             when(role) {
                 1 -> {
                     val intent = Intent(this, HomeAdminActivity::class.java)
