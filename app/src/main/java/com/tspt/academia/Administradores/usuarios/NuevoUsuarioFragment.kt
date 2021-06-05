@@ -294,7 +294,7 @@ class NuevoUsuarioFragment : Fragment(R.layout.fragment_nuevo_usuario), AdapterV
                                     user.child("nombre").setValue(nombre)
                                     user.child("apellidos").setValue(apellidos)
                                     user.child("email").setValue(correo)
-                                    user.child("role").setValue(2.toLong())
+                                    user.child("role").setValue(5.toLong())
                                     user.child("fecha_incripcion").setValue(fechaInscripcion)
                                     user.child("telefono").setValue(telefono)
                                     user.push()
