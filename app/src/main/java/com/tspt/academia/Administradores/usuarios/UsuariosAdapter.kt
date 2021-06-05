@@ -43,6 +43,11 @@ class UsuariosAdapter(val context: Context, val usuarios: ArrayList<User>) :
                 holder.rol.text = "Responsable"
                 holder.cardView.setCardBackgroundColor(context.resources.getColor(R.color.responsable))
             }
+
+            3 -> {
+                holder.rol.text = "Tutor"
+                holder.cardView.setCardBackgroundColor(context.resources.getColor(R.color.tutor))
+            }
         }
 
         holder.nombre.text = nombre
