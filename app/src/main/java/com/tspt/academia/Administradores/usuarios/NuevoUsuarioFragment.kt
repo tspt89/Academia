@@ -158,7 +158,7 @@ class NuevoUsuarioFragment : Fragment(R.layout.fragment_nuevo_usuario), AdapterV
 
                     if(validateInputResponsable(nombre,apellidos,telefono,correo,passwd,confPasswd)){
 
-                        Toast.makeText(requireContext(),"Registrando usuario tipo Instructor", Toast.LENGTH_LONG).show()
+                        Toast.makeText(requireContext(),"Registrando usuario tipo Responsable", Toast.LENGTH_LONG).show()
 
                         try{
                             val app = FirebaseApp.initializeApp(requireContext(),f2,"App2")
@@ -201,7 +201,55 @@ class NuevoUsuarioFragment : Fragment(R.layout.fragment_nuevo_usuario), AdapterV
                 }
 
                 4 -> {
+                    val nombre = binding.nombreTutorET.text.toString().trim()
+                    val apellidos = binding.apellidoTutorET.text.toString().trim()
+                    val telefono = binding.telefonoTutorET.text.toString().trim()
+                    val correo = binding.correoTutorET.text.toString().trim()
+                    val passwd = binding.passwdTutorET.text.toString().trim()
+                    val confPasswd = binding.confPasswdTutorET.text.toString().trim()
 
+                    if(validateInputTutor(nombre,apellidos,telefono,correo,passwd,confPasswd)){
+
+                        Toast.makeText(requireContext(),"Registrando usuario tipo Tutor", Toast.LENGTH_LONG).show()
+
+                        try{
+                            val app = FirebaseApp.initializeApp(requireContext(),f2,"App2")
+                            val auth = FirebaseAuth.getInstance(app)
+
+                            auth.createUserWithEmailAndPassword(correo,passwd).addOnCompleteListener {
+                                if(it.isSuccessful){
+                                    val uidUser = it.result!!.user!!.uid
+                                    println("$nombre $apellidos $telefono $correo$passwd $confPasswd ")
+                                    //Registro en la base de datos
+                                    val user = db.child("users").child("$uidUser")
+
+                                    user.child("nombre").setValue(nombre)
+                                    user.child("apellidos").setValue(apellidos)
+                                    user.child("email").setValue(correo)
+                                    user.child("role").setValue(4.toLong())
+                                    user.child("telefono").setValue(telefono)
+                                    user.push()
+
+                                    val inst = db.child("Roles")
+
+                                    inst.child("Tutor").child("$uidUser").setValue(nombre)
+                                    inst.push()
+
+                                    Toast.makeText(requireContext(), "Usuario Tutor registrado existosamente!", Toast.LENGTH_LONG).show()
+                                    auth.app.delete()
+                                    val action = NuevoUsuarioFragmentDirections.actionNuevoUsuarioFragmentToUsuariosAdminFragment()
+                                    findNavController().navigate(action)
+
+                                } else {
+                                    Toast.makeText(requireContext(), "Hubo un error al momento de registrarse... (${it.exception!!.message})",Toast.LENGTH_LONG).show()
+                                    it.exception!!.printStackTrace()
+                                }
+                            }
+                        }catch (e: Exception){
+                            Toast.makeText(requireContext(), "Hubo un error al momento de registrarse... ${e.message}", Toast.LENGTH_LONG).show()
+                            e.printStackTrace()
+                        }
+                    }
                 }
 
                 5 -> {
@@ -320,6 +368,41 @@ class NuevoUsuarioFragment : Fragment(R.layout.fragment_nuevo_usuario), AdapterV
         else if(passwd != confPasswd){
             binding.confPasswdRespET.error = "Favor de verificar una contraseña"
             binding.confPasswdRespET.requestFocus()
+            return false
+        }
+        return true
+    }
+
+    private fun validateInputTutor(nombre:String, apellidos: String, telefono: String, correo: String, passwd: String, confPasswd: String): Boolean {
+        if(nombre.isNullOrEmpty()){
+            binding.nombreTutorET.error = "Favor de ingresar un nombre"
+            binding.nombreTutorET.requestFocus()
+            return false
+        }
+        else if(apellidos.isNullOrEmpty()){
+            binding.apellidoTutorET.error = "Favor de ingresar un apellido"
+            binding.apellidoTutorET.requestFocus()
+            return false
+        }
+        else if(telefono.isNullOrEmpty() || telefono.length != 10){
+            binding.telefonoTutorET.error = "Favor de ingresar un telefono"
+            binding.telefonoTutorET.requestFocus()
+            return false
+        }
+        else if(correo.isNullOrEmpty()){
+            binding.correoTutorET.error = "Favor de ingresar un correo"
+            binding.correoTutorET.requestFocus()
+            return false
+        }
+        else if(passwd.isNullOrEmpty() || passwd.length < 6){
+            binding.passwdTutorET.error = "Favor de ingresar una contraseña"
+            binding.passwdTutorET.requestFocus()
+            return false
+        }
+
+        else if(passwd != confPasswd){
+            binding.confPasswdTutorET.error = "Favor de verificar una contraseña"
+            binding.confPasswdTutorET.requestFocus()
             return false
         }
         return true
