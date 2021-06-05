@@ -1,5 +1,6 @@
 package com.tspt.academia.Administradores.usuarios
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -9,13 +10,10 @@ import androidx.navigation.fragment.findNavController
 import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.ktx.initialize
 import com.tspt.academia.R
 import com.tspt.academia.databinding.FragmentNuevoUsuarioBinding
-import java.lang.Exception
 import java.util.*
 
 class NuevoUsuarioFragment : Fragment(R.layout.fragment_nuevo_usuario), AdapterView.OnItemSelectedListener{
@@ -23,6 +21,7 @@ class NuevoUsuarioFragment : Fragment(R.layout.fragment_nuevo_usuario), AdapterV
     private lateinit var binding : FragmentNuevoUsuarioBinding
 
     private var rol = -1
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -36,6 +35,22 @@ class NuevoUsuarioFragment : Fragment(R.layout.fragment_nuevo_usuario), AdapterV
     private fun setup(){
         val db = Firebase.database.reference
         binding.spinner.onItemSelectedListener = this
+
+        binding.inscripcionAlumnoBtn.setOnClickListener {
+            val c = Calendar.getInstance()
+            val year = c.get(Calendar.YEAR)
+            val month = c.get(Calendar.MONTH)
+            val day = c.get(Calendar.DAY_OF_MONTH)
+
+
+            val dpd = DatePickerDialog(requireActivity(), DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+
+                binding.inscripcionAlumnoBtn.text = "" + dayOfMonth + "/" + (monthOfYear+1) + "/" + year
+
+            }, year, month, day)
+
+            dpd.show()
+        }
 
         binding.button.setOnClickListener {
             val f2 = FirebaseOptions.Builder().setDatabaseUrl("https://webacademia-67494-default-rtdb.firebaseio.com")
@@ -252,8 +267,58 @@ class NuevoUsuarioFragment : Fragment(R.layout.fragment_nuevo_usuario), AdapterV
                     }
                 }
 
-                5 -> {
+                5 -> { //Alumno
+                    val nombre = binding.nombreAlumnoET.text.toString().trim()
+                    val apellidos = binding.apellidoAlumnoET.text.toString().trim()
+                    val telefono = binding.telefonoAlumnoET.text.toString().trim()
+                    val correo = binding.correoAlumnoET.text.toString().trim()
+                    val passwd = binding.passwdAlumnoET.text.toString().trim()
+                    val confPasswd = binding.confPasswdAlumnoET.text.toString().trim()
+                    val fechaInscripcion = binding.inscripcionAlumnoBtn.text.toString().trim()
 
+                    if(validateInputAlumno(nombre,apellidos,telefono,correo,fechaInscripcion,passwd,confPasswd)){
+
+                        Toast.makeText(requireContext(),"Registrando usuario tipo Alumno", Toast.LENGTH_LONG).show()
+
+                        try{
+                            val app = FirebaseApp.initializeApp(requireContext(),f2,"App2")
+                            val auth = FirebaseAuth.getInstance(app)
+
+                            auth.createUserWithEmailAndPassword(correo,passwd).addOnCompleteListener {
+                                if(it.isSuccessful){
+                                    val uidUser = it.result!!.user!!.uid
+
+                                    //Registro en la base de datos
+                                    val user = db.child("users").child(uidUser)
+
+                                    user.child("nombre").setValue(nombre)
+                                    user.child("apellidos").setValue(apellidos)
+                                    user.child("email").setValue(correo)
+                                    user.child("role").setValue(2.toLong())
+                                    user.child("fecha_incripcion").setValue(fechaInscripcion)
+                                    user.child("telefono").setValue(telefono)
+                                    user.push()
+
+                                    val inst = db.child("Roles")
+
+                                    inst.child("Alumno").child(uidUser).setValue(nombre)
+                                    inst.push()
+
+                                    Toast.makeText(requireContext(), "Usuario Alumno registrado existosamente!", Toast.LENGTH_LONG).show()
+                                    auth.app.delete()
+                                    val action = NuevoUsuarioFragmentDirections.actionNuevoUsuarioFragmentToUsuariosAdminFragment()
+                                    findNavController().navigate(action)
+
+                                } else {
+                                    Toast.makeText(requireContext(), "Hubo un error al momento de registrarse... (${it.exception!!.message})",Toast.LENGTH_LONG).show()
+                                    it.exception!!.printStackTrace()
+                                }
+                            }
+                        }catch (e: Exception){
+                            Toast.makeText(requireContext(), "Hubo un error al momento de registrarse... ${e.message}", Toast.LENGTH_LONG).show()
+                            e.printStackTrace()
+                        }
+                    }
                 }
             }
         }
@@ -403,6 +468,47 @@ class NuevoUsuarioFragment : Fragment(R.layout.fragment_nuevo_usuario), AdapterV
         else if(passwd != confPasswd){
             binding.confPasswdTutorET.error = "Favor de verificar una contraseña"
             binding.confPasswdTutorET.requestFocus()
+            return false
+        }
+        return true
+    }
+
+    private fun validateInputAlumno(nombre:String, apellidos: String, telefono: String, correo: String, fechaInsc: String, passwd: String, confPasswd: String): Boolean {
+        if(nombre.isNullOrEmpty()){
+            binding.nombreAlumnoET.error = "Favor de ingresar un nombre"
+            binding.nombreAlumnoET.requestFocus()
+            return false
+        }
+        else if(apellidos.isNullOrEmpty()){
+            binding.apellidoAlumnoET.error = "Favor de ingresar un apellido"
+            binding.apellidoAlumnoET.requestFocus()
+            return false
+        }
+        else if(telefono.isNullOrEmpty() || telefono.length != 10){
+            binding.telefonoAlumnoET.error = "Favor de ingresar un telefono"
+            binding.telefonoAlumnoET.requestFocus()
+            return false
+        }
+        else if(correo.isNullOrEmpty()){
+            binding.correoAlumnoET.error = "Favor de ingresar un correo"
+            binding.correoAlumnoET.requestFocus()
+            return false
+        }
+
+        else if(fechaInsc.isNullOrEmpty() || fechaInsc.split("/").size != 3){
+            binding.inscripcionAlumnoBtn.error = "Por favor ingrese una fecha de nacimiento valido"
+            binding.inscripcionAlumnoBtn.requestFocus()
+        }
+
+        else if(passwd.isNullOrEmpty() || passwd.length < 6){
+            binding.passwdAlumnoET.error = "Favor de ingresar una contraseña"
+            binding.passwdAlumnoET.requestFocus()
+            return false
+        }
+
+        else if(passwd != confPasswd){
+            binding.confPasswdAlumnoET.error = "Favor de verificar una contraseña"
+            binding.confPasswdAlumnoET.requestFocus()
             return false
         }
         return true
