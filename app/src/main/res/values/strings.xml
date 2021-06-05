@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Academia</string>
+
+    <array name="user_type">
+        <item name="administrador">Administrador</item>
+        <item name="instructor">Instructor</item>
+        <item name="responsable">Responsable</item>
+        <item name="tutor">Tutor</item>
+        <item name="alumno">Alumno</item>
+    </array>
 </resources>

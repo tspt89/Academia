@@ -27,16 +27,16 @@ class UsuariosAdapter(val context: Context, val usuarios: ArrayList<User>) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val nombre = usuarios[position].nombre
         val correo = usuarios[position].email
-        val rolNum = usuarios[position].role
 
-        when (rolNum) {
+        when (usuarios[position].role) {
             1 -> {
                 holder.rol.text = "Administrador"
                 holder.cardView.setCardBackgroundColor(context.resources.getColor(R.color.admin))
             }
 
             2 -> {
-
+                holder.rol.text = "Instructor"
+                holder.cardView.setCardBackgroundColor(context.resources.getColor(R.color.instructor))
             }
         }
 

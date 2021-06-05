@@ -22,7 +22,7 @@ class ProductsAdminAdapter(val context: Context) : RecyclerView.Adapter<Products
         val desc : TextView = view.findViewById(R.id.descripcionProductoTV)
         val precio : TextView = view.findViewById(R.id.precioProductoTV)
         val info : ImageView = view.findViewById(R.id.infoIV)
-        val card : CardView = view.findViewById(R.id.userCardView)
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

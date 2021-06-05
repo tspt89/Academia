@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -24,11 +25,16 @@ class UsuariosAdminFragment : Fragment(R.layout.fragment_usuarios_admin) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        requireActivity().title = "Usuarios"
+
         binding = FragmentUsuariosAdminBinding.bind(view)
 
         getUsers()
 
-
+        binding.nuevoUsuarioBtn.setOnClickListener {
+            val action = UsuariosAdminFragmentDirections.actionUsuariosAdminFragmentToNuevoUsuarioFragment()
+            findNavController().navigate(action)
+        }
     }
 
     private fun getUsers(){
@@ -40,20 +46,34 @@ class UsuariosAdminFragment : Fragment(R.layout.fragment_usuarios_admin) {
         val listener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
 
+                users.clear()
+
                 snapshot.children.forEach {
-                    val rol = it.child("role").value.toString().toInt()
+                    val rol = it.child("role").value?.toString()?.toInt()
                     println("${it.key} - $rol")
+                    if(rol != null){
+                        when (rol){
+                            1 -> {  // Administrador
+                                val n = it.child("nombre").value?.toString()
+                                val a = it.child("apellidos").value?.toString()
+                                val e = it.child("email").value?.toString()
+                                val t = it.child("telefono").value?.toString()
+                                println("User RV: $n $a $e $t")
+                                users.add(User(it.key.toString()).setAdministrator(n, a, t, e))
+                            }
 
-                    when (rol){
-                        1 -> {  // Administrador
-                            val n = it.child("nombre").value as String
-                            val a = it.child("apellidos").value as String
-                            val e = it.child("email").value as String
-                            val t = it.child("telefono").value as String
-
-                            users.add(User(it.key.toString()).setAdministrator(n, a, t, e))
+                            2 -> {  // Instructor
+                                val n = it.child("nombre").value?.toString()
+                                val a = it.child("apellidos").value?.toString()
+                                val e = it.child("email").value?.toString()
+                                val t = it.child("telefono").value?.toString()
+                                val f = it.child("fecha_nacimiento").value?.toString()
+                                println("User RV: $n $a $e $t")
+                                users.add(User(it.key.toString()).setInstructor(n,a,t,e,f))
+                            }
                         }
                     }
+
                 }
 
                 binding.usuariosRV.adapter!!.notifyDataSetChanged()

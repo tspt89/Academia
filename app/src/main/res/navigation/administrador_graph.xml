@@ -41,5 +41,20 @@
         android:id="@+id/usuariosAdminFragment"
         android:name="com.tspt.academia.Administradores.usuarios.UsuariosAdminFragment"
         android:label="fragment_usuarios_admin"
-        tools:layout="@layout/fragment_usuarios_admin" />
+        tools:layout="@layout/fragment_usuarios_admin" >
+        <action
+            android:id="@+id/action_usuariosAdminFragment_to_nuevoUsuarioFragment"
+            app:destination="@id/nuevoUsuarioFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/nuevoUsuarioFragment"
+        android:name="com.tspt.academia.Administradores.usuarios.NuevoUsuarioFragment"
+        android:label="fragment_nuevo_usuario"
+        tools:layout="@layout/fragment_nuevo_usuario" >
+        <action
+            android:id="@+id/action_nuevoUsuarioFragment_to_usuariosAdminFragment"
+            app:destination="@id/usuariosAdminFragment"
+            app:popUpTo="@id/usuariosAdminFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>
