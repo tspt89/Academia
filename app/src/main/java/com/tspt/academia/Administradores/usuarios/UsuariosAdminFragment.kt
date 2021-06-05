@@ -71,6 +71,15 @@ class UsuariosAdminFragment : Fragment(R.layout.fragment_usuarios_admin) {
                                 println("User RV: $n $a $e $t")
                                 users.add(User(it.key.toString()).setInstructor(n,a,t,e,f))
                             }
+
+                            3 -> {  // Responsable
+                                val n = it.child("nombre").value?.toString()
+                                val a = it.child("apellidos").value?.toString()
+                                val e = it.child("email").value?.toString()
+                                val t = it.child("telefono").value?.toString()
+                                println("User RV: $n $a $e $t")
+                                users.add(User(it.key.toString()).setResponsable(n,a,t,e))
+                            }
                         }
                     }
 
