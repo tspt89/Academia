@@ -9,6 +9,7 @@ data class User(val id: String) {
     var apellido: String? = ""
     var role: Int? = -1
     var telephone: String? = ""
+    var isSelected = false
 
     fun setAdministrator(n: String?, a: String?, t: String?, e : String?): User{
         this.nombre = n

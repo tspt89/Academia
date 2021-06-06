@@ -103,7 +103,7 @@ class UsuariosAdminFragment : Fragment(R.layout.fragment_usuarios_admin) {
                     }
 
                 }
-
+                var sortedList = users.sortedBy { it.role }
                 binding.usuariosRV.adapter!!.notifyDataSetChanged()
             }
 
