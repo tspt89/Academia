@@ -68,6 +68,9 @@
         <action
             android:id="@+id/action_actividadesAdminFragment_to_nuevaActividadAdminFragment"
             app:destination="@id/nuevaActividadAdminFragment" />
+        <action
+            android:id="@+id/action_actividadesAdminFragment_to_detalleActividadAdminFragment"
+            app:destination="@id/detalleActividadAdminFragment" />
     </fragment>
     <fragment
         android:id="@+id/nuevaActividadAdminFragment"
@@ -79,5 +82,19 @@
             app:destination="@id/actividadesAdminFragment"
             app:popUpTo="@id/actividadesAdminFragment"
             app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/detalleActividadAdminFragment"
+        android:name="com.tspt.academia.Administradores.actividades.DetalleActividadAdminFragment"
+        android:label="fragment_detalle_actividad_admin"
+        tools:layout="@layout/fragment_detalle_actividad_admin" >
+        <action
+            android:id="@+id/action_detalleActividadAdminFragment_to_actividadesAdminFragment"
+            app:destination="@id/actividadesAdminFragment"
+            app:popUpTo="@id/actividadesAdminFragment"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="actividad"
+            app:argType="com.tspt.academia.models.Actividad" />
     </fragment>
 </navigation>
