@@ -8,4 +8,11 @@
         <item name="tutor">Tutor</item>
         <item name="alumno">Alumno</item>
     </array>
+
+    <array name="forma_pago">
+        <item name="efectivo">Efectivo</item>
+        <item name="tarjeta_debito">Tarjeta de Debito</item>
+        <item name="tarjeta_credito">Tarjeta de Credito</item>
+        <item name="transferencia">Trasnferencia Bancaria</item>
+    </array>
 </resources>

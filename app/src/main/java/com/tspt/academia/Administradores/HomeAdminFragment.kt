@@ -41,5 +41,10 @@ class HomeAdminFragment: Fragment(R.layout.fragment_home_admin) {
             val action = HomeAdminFragmentDirections.actionHomeAdminFragmentToProductsAdminFragment()
             findNavController().navigate(action)
         }
+
+        binding.ventasBtn.setOnClickListener {
+            val action = HomeAdminFragmentDirections.actionHomeAdminFragmentToVentasAdminFragment()
+            findNavController().navigate(action)
+        }
     }
 }

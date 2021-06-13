@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_homeAdminFragment_to_actividadesAdminFragment"
             app:destination="@id/actividadesAdminFragment" />
+        <action
+            android:id="@+id/action_homeAdminFragment_to_ventasAdminFragment"
+            app:destination="@id/ventasAdminFragment" />
     </fragment>
     <fragment
         android:id="@+id/productsAdminFragment"
@@ -96,5 +99,23 @@
         <argument
             android:name="actividad"
             app:argType="com.tspt.academia.models.Actividad" />
+    </fragment>
+    <fragment
+        android:id="@+id/ventasAdminFragment"
+        android:name="com.tspt.academia.Administradores.ventas.VentasAdminFragment"
+        android:label="fragment_ventas_admin"
+        tools:layout="@layout/fragment_ventas_admin" >
+        <action
+            android:id="@+id/action_ventasAdminFragment_to_nuevaVentaFragment"
+            app:destination="@id/nuevaVentaFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/nuevaVentaFragment"
+        android:name="com.tspt.academia.Administradores.ventas.NuevaVentaFragment"
+        android:label="NuevaVentaFragment"
+        tools:layout="@layout/fragment_nueva_venta" >
+        <action
+            android:id="@+id/action_nuevaVentaFragment_to_ventasAdminFragment"
+            app:destination="@id/ventasAdminFragment" />
     </fragment>
 </navigation>

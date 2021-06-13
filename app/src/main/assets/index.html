@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Breath Focus</title>
+    <meta name="description" content="">
+    <meta name="author" content="© Glicer">
+    <link rel="shortcut icon" href="img/favicon.ico">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" />
+</head>
+
+<body>
+<div class="container">
+    <div class="main">
+        <button id="settings"><i id="settingsIcon" class="fas fa-cog icon-cog"></i></button>
+        <div id="mainContent" class="main-content">
+            <span id="breathMsg">Inicia el ejercicio cuando estés listo</span>
+
+            <div class="breath">
+                <div class="breath-content"></div>
+            </div>
+            <button id="start">Empezar</button>
+            <div id="countdown" class="number"></div>
+        </div>
+        <div id="sidebar" class="col-lg-2 hide">
+            <div class="option">
+                <h2>Opciones</h2>
+
+                <div class="breathMsg">
+                    <small>Opciones</small>
+                </div>
+                <hr>
+                <div>
+                    <div class="title">Velocidad</div>
+                    <div>
+                        <input id="default" type="radio" name="speed" checked>
+                        <label for="default">default</label><br>
+                        <input id="slow" type="radio" name="speed">
+                        <label for="slow">slow</label>
+                    </div>
+                </div>
+                <hr>
+                <div>
+                    <div class="title">Timer</div>
+                    <div id="timerSelect" class="timer">
+                        <div class="minutes">
+                            <i id="increase" class="icon-up-dir button-icon"></i>
+                            <span id="minutes" class="number">5</span>
+                            <i id="decrease" class="icon-down-dir button-icon"></i>
+                        </div>
+                        <label>minutes</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style type="text/css">
+        html {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hide {
+            display: none !important;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            font-family: Verdana, Arial, sans-serif;
+            font-size: 1em;
+            width: 100%;
+            min-height: 100vh;
+            margin: 0 auto;
+            background-color: white;
+            -webkit-animation: bgcolor 10s infinite ease-in-out;
+            animation: bgcolor 10s infinite ease-in-out;
+            -webkit-animation-play-state: paused;
+            animation-play-state: paused;
+            overflow-x: hidden;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-content: space-between;
+            justify-content: center;
+            flex: 1 1 auto;
+            width: 100%;
+        }
+
+        .main {
+            display: flex;
+            flex: 1 1 auto;
+            align-items: stretch;
+            width: 100%;
+            height: 100%;
+            font-size: 1.2em;
+        }
+
+        a,
+        button {
+            cursor: pointer;
+            outline: none;
+            -webkit-transition-duration: 0.4s;
+            transition-duration: 0.4s;
+        }
+
+        h2 {
+            font-size: 1.4em;
+        }
+
+        /********************************************/
+
+        #settings {
+            position: fixed;
+            top: 0;
+            right: 0;
+            z-index: 999;
+            color: #616161;
+            font-size: 1.2em;
+            padding: 6px 5px;
+            background: transparent;
+            border: none;
+            opacity: 0.8;
+        }
+
+        #settings:hover {
+            opacity: 1;
+        }
+
+        /********************************************/
+
+        .main-content {
+            display: flex;
+            order: 1;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            letter-spacing: 1px;
+        }
+
+        #breathMsg {
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: center;
+            width: 100%;
+            margin-bottom: 20px;
+            color: #616161;
+            text-align: center;
+        }
+
+        .breath {
+            width: 320px;
+            height: 320px;
+            margin: 10px auto;
+            padding: 10px;
+            background-color: #557dd9;
+            border-radius: 50%;
+            box-sizing: border-box;
+            -webkit-animation: bgcolor2 10s infinite ease-in-out;
+            animation: bgcolor2 10s infinite ease-in-out;
+        }
+
+        .breath-content {
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 50%;
+
+            -webkit-transform: scale(0.1);
+            transform: scale(0.1);
+            -webkit-animation: scale 10s infinite ease-in-out;
+            animation: scale 10s infinite ease-in-out;
+            -webkit-animation-play-state: paused;
+            animation-play-state: paused;
+
+            -webkit-transform-origin: 50% 50%;
+            transform-origin: 50% 50%;
+        }
+
+        /********************************************/
+
+        .sidebar {
+            display: flex;
+            order: 2;
+            flex-direction: column;
+            width: 0;
+            min-height: 100%;
+            background-color: white;
+            overflow: hidden;
+            opacity: 0;
+            -webkit-transition: opacity 0.5s, width 0.1s;
+            transition: opacity 0.5s, width 0.1s;
+
+        }
+
+        .sidebar.isOpen {
+            width: 260px;
+            opacity: 1;
+        }
+
+        .option {
+            color: #616161;
+            padding: 30px;
+        }
+
+        .option label {
+            font-size: 0.8em;
+        }
+
+        .option hr {
+            border: none;
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+
+        .option .title {
+            border-bottom: 1px solid #E7E7E7;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        /********************************************/
+
+        .timer {
+            display: flex;
+            align-items: center;
+        }
+
+        .timer .minutes {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .timer .button-icon {
+            cursor: pointer;
+            font-size: 18px;
+            line-height: 1;
+            margin-top: -2px;
+            margin-bottom: -2px;
+        }
+
+        /********************************************/
+
+        #start {
+            font-size: 1em;
+            color: #5DB4EA;
+            margin-top: 10px;
+            margin-left: 10px;
+            margin-right: 10px;
+            padding: 6px 10px;
+            background-color: white;
+            border-radius: 4px;
+            border: 2px solid #5DB4EA;
+        }
+
+        #start:hover {
+            color: white;
+            background-color: #5DB4EA;
+        }
+
+        #countdown {
+            text-align: center;
+            margin-top: -35px;
+            height: 80px;
+        }
+
+        .number {
+            color: #616161;
+        }
+
+        /********************************************/
+
+        .fade-in {
+            -webkit-animation: fadeIn 1s 1 both;
+            animation: fadeIn 1s both;
+        }
+
+        .fade-out {
+            -webkit-animation: fadeOut 1s 1 both;
+            animation: fadeOut 1s both;
+        }
+
+        /********************************************/
+
+        @-webkit-keyframes scale {
+            50% {
+                background-color: white;
+                -webkit-transform: scale(1);
+            }
+        }
+
+        @keyframes scale {
+            50% {
+                background-color: white;
+                transform: scale(1);
+            }
+        }
+
+        @-webkit-keyframes bgcolor {
+            50% {
+                background-color: #7ef2dd;
+            }
+        }
+
+        @keyframes bgcolor {
+            50% {
+                background-color: white;
+            }
+        }
+
+        @-webkit-keyframes bgcolor2 {
+            50% {
+                background-color: #5DB4EA;
+            }
+        }
+
+        @keyframes bgcolor2 {
+            50% {
+                background-color: #5DB4EA;
+            }
+        }
+
+        /********************************************/
+
+        @-webkit-keyframes fadeIn {
+            from {
+                opacity: 0;
+                visibility: hidden;
+            }
+
+            to {
+                opacity: 1;
+                visibility: visible;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                visibility: hidden;
+            }
+
+            to {
+                opacity: 1;
+                visibility: visible;
+            }
+        }
+
+        @-webkit-keyframes fadeOut {
+            from {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
+        /********************************************/
+
+        @media screen and (max-width: 767px) {
+            .breath {
+                width: 220px;
+                height: 220px;
+            }
+
+            .breath-content {
+                width: 200px;
+                height: 200px;
+            }
+
+            .sidebar.isOpen {
+                width: 100%;
+            }
+
+            .main-content.isOpen {
+                width: 0;
+                z-index: 0;
+                overflow: hidden;
+            }
+        }
+
+
+        /* Chrome hack: SVG is rendered more smooth in Windozze. 100% magic, uncomment if you need it. */
+        /* Note, that will break hinting! In other OS-es font will be not as sharp as it could be */
+        /*
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: 'breath-focus-font';
+    src: url('../font/breath-focus-font.svg?60439665#breath-focus-font') format('svg');
+  }
+}
+*/
+
+        [class^="icon-"]:before,
+        [class*=" icon-"]:before {
+            font-family: "breath-focus-font";
+            font-style: normal;
+            font-weight: normal;
+            speak: none;
+
+            display: inline-block;
+            text-decoration: inherit;
+            width: 1em;
+            margin-right: .2em;
+            text-align: center;
+            /* opacity: .8; */
+
+            /* For safety - reset parent styles, that can break glyph codes*/
+            font-variant: normal;
+            text-transform: none;
+
+            /* fix buttons height, for twitter bootstrap */
+            line-height: 1em;
+
+            /* Animation center compensation - margins should be symmetric */
+            /* remove if not needed */
+            margin-left: .2em;
+
+            /* you can be more comfortable with increased icons size */
+            /* font-size: 120%; */
+
+            /* Font smoothing. That was taken from TWBS */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+
+            /* Uncomment for 3D effect */
+            /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
+        }
+
+
+        /* '' */
+        .icon-down-dir:before {
+            content: '\e802';
+        }
+
+        /* '' */
+        .icon-up-dir:before {
+            content: '\e803';
+        }
+
+        /* '' */
+        .icon-github-circled:before {
+            content: '\f09b';
+        }
+
+        /* '' */
+        .icon-hand-peace-o:before {
+            content: '\f25b';
+        }
+
+        /* '' */
+    </style>
+
+<script type="text/javascript">
+        var breathFocus = (function() {
+            var breathInterval = null;
+            var breathTime = 5;
+            var stateInterval = null;
+
+            //ejemplo
+            var ejem = new URL('https://localhost:8080/1');
+            console.log(ejem);
+            var x = ejem.pathname.split('/');
+            var minutes = x[1];
+            console.log(minutes);
+
+            var breathContent = document.getElementsByClassName("breath-content")[0];
+            var start = document.getElementById("start");
+            var settings = document.getElementById("settings");
+            var settingsIcon = document.getElementById("settingsIcon");
+            var increase = document.getElementById("increase");
+            var decrease = document.getElementById("decrease");
+            //var minutes = document.getElementById("minutes");
+            var countdown = document.getElementById("countdown");
+            var breathMsg = document.getElementById("breathMsg");
+            var message = "Inicia el ejercicio cuando estés listo";
+            var mainContent = document.getElementById("mainContent");
+            var sidebar = document.getElementById("sidebar");
+
+            window.onload = function() {
+                init();
+            };
+
+            function init() {
+                document.body.style.WebkitAnimationPlayState = "paused";
+                document.body.style.animationPlayState = "paused";
+                breathContent.style.WebkitAnimationPlayState = "paused";
+                breathContent.style.animationPlayState = "paused";
+
+                breathMsg.textContent = message;
+
+                /*
+                decrease.addEventListener("click", function() {
+                    if (breathTime > 1) {
+                        breathTime--;
+                    }
+                    minutes.textContent = breathTime.toString();
+                });
+                increase.addEventListener("click", function() {
+                    breathTime++;
+                    minutes.textContent = breathTime.toString();
+                });
+                */
+                start.addEventListener("click", function() {
+                    var msgInterval = (document.getElementById("slow").checked) ? 7500 : 5000;
+                    var breathSpeed = (document.getElementById("slow").checked) ? "15s" : "10s";
+                    breathContent.style.WebkitAnimationDuration = breathSpeed;
+                    breathContent.style.animationDuration = breathSpeed;
+
+                    breathMsg.textContent = "Inhala";
+                    stateInterval = setInterval(function() {
+                        breathMsg.textContent = (breathMsg.textContent === "Exhala") ? "Inhala" : "Exhala";
+                    }, msgInterval);
+
+                    updateClass(start, "fade-in", "fade-out");
+                    updateClass(countdown, "fade-out", "fade-in");
+
+                    //startTimer(breathTime * 60);
+                    startTimer(minutes * 60);
+                    document.body.style.WebkitAnimationPlayState = "running";
+                    document.body.style.animationPlayState = "running";
+                    breathContent.style.WebkitAnimationPlayState = "running";
+                    breathContent.style.animationPlayState = "running";
+                });
+
+                settings.addEventListener("click", function() {
+                    mainContent.classList.toggle("isOpen");
+                    sidebar.classList.toggle("isOpen");
+                    settingsIcon.classList.toggle("fa-cog");
+                    settingsIcon.classList.toggle("icon-cancel");
+                });
+            }
+
+            function startTimer(duration) {
+                var timer = duration,
+                    minutes, seconds;
+
+                function breathTimer() {
+                    minutes = parseInt(timer / 60, 10);
+                    seconds = parseInt(timer % 60, 10);
+
+                    minutes = minutes < 10 ? "0" + minutes : minutes;
+                    seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                    countdown.textContent = (minutes + ":" + seconds);
+
+                    if (--timer < 0) {
+                        clearInterval(breathInterval);
+                        clearInterval(stateInterval);
+
+                        updateClass(start, "fade-out", "fade-in");
+                        updateClass(countdown, "fade-in", "fade-out");
+                        breathMsg.textContent = message;
+
+                        document.body.style.WebkitAnimationPlayState = "paused";
+                        document.body.style.animationPlayState = "paused";
+                        breathContent.style.WebkitAnimationPlayState = "paused";
+                        breathContent.style.animationPlayState = "paused";
+                    }
+                }
+
+                breathTimer();
+                breathInterval = setInterval(breathTimer, 1000);
+            }
+
+            function updateClass(target, removeClass, addClass) {
+                target.classList.remove(removeClass);
+                target.classList.add(addClass);
+            }
+        })();
+    </script>
+</body></html>
