@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/users_graph"
+    app:startDestination="@id/homeUsersFragment">
+
+    <fragment
+        android:id="@+id/homeUsersFragment"
+        android:name="com.tspt.academia.other_users.HomeUsersFragment"
+        android:label="fragment_home_users"
+        tools:layout="@layout/fragment_home_users" />
+</navigation>

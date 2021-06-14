@@ -3,16 +3,14 @@ package com.tspt.academia
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
-import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import com.tspt.academia.Administradores.HomeAdminActivity
-import com.tspt.academia.OtherUsers.HomeUsersActivity
+import com.tspt.academia.other_users.HomeUsersActivity
 import com.tspt.academia.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {

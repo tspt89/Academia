@@ -11,7 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Academia">
-        <activity android:name=".OtherUsers.HomeUsersActivity"></activity>
+        <activity android:name=".other_users.HomeUsersActivity"></activity>
         <activity android:name=".Administradores.HomeAdminActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>

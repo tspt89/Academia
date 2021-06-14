@@ -1,4 +1,4 @@
-package com.tspt.academia.OtherUsers
+package com.tspt.academia.other_users
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
