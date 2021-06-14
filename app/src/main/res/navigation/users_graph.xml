@@ -18,5 +18,23 @@
         android:id="@+id/actividadesFragment"
         android:name="com.tspt.academia.other_users.actividades.ActividadesFragment"
         android:label="fragment_actividades"
-        tools:layout="@layout/fragment_actividades" />
+        tools:layout="@layout/fragment_actividades" >
+        <action
+            android:id="@+id/action_actividadesFragment_to_detalleActividadFragment"
+            app:destination="@id/detalleActividadFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detalleActividadFragment"
+        android:name="com.tspt.academia.other_users.actividades.DetalleActividadFragment"
+        android:label="fragment_detalle_actividad"
+        tools:layout="@layout/fragment_detalle_actividad" >
+        <action
+            android:id="@+id/action_detalleActividadFragment_to_actividadesFragment"
+            app:destination="@id/actividadesFragment"
+            app:popUpTo="@id/actividadesFragment"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="actividad"
+            app:argType="com.tspt.academia.models.Actividad" />
+    </fragment>
 </navigation>

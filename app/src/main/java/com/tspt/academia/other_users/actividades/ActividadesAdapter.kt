@@ -38,8 +38,8 @@ class ActividadesAdapter(val context: Context, val navController: NavController)
 
         holder.detalle.setOnClickListener {
 
-            //val action = ActividadesAdminFragmentDirections.actionActividadesAdminFragmentToDetalleActividadAdminFragment(actividades[position])
-            //navController.navigate(action)
+            val action = ActividadesFragmentDirections.actionActividadesFragmentToDetalleActividadFragment(actividades[position])
+            navController.navigate(action)
         }
 
 

@@ -11,7 +11,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.tspt.academia.Administradores.actividades.ActividadesAdapter
 import com.tspt.academia.R
 import com.tspt.academia.databinding.FragmentActividadesBinding
 import com.tspt.academia.models.Actividad
@@ -21,6 +20,7 @@ class ActividadesFragment : Fragment(R.layout.fragment_actividades) {
     private lateinit var binding : FragmentActividadesBinding
 
     private lateinit var actividadesAdapter: ActividadesAdapter
+    private val actividades = ArrayList<Actividad>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -29,9 +29,10 @@ class ActividadesFragment : Fragment(R.layout.fragment_actividades) {
         requireActivity().title = "Mis actividades"
 
         actividadesAdapter = ActividadesAdapter(requireContext(),findNavController())
+        getActividades()
+        actividadesAdapter.setElements(actividades)
         binding.actividadesRV.adapter = actividadesAdapter
         binding.actividadesRV.layoutManager = LinearLayoutManager(requireContext())
-        getActividades()
     }
 
     private fun getActividades(){
@@ -52,7 +53,7 @@ class ActividadesFragment : Fragment(R.layout.fragment_actividades) {
         val db = Firebase.database.reference.child("Actividades")
         val listener = object  : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val actividades = ArrayList<Actividad>()
+
 
                 snapshot.children.forEach {
                     val id = it.key
@@ -72,11 +73,12 @@ class ActividadesFragment : Fragment(R.layout.fragment_actividades) {
                         i.keys.forEach{ ik.add(it.toString())}
 
                         actividades.add(Actividad(id,n,f,horaInicial,horaFinal,ak,ik))
+                        actividadesAdapter.notifyDataSetChanged()
                     }
 
                 }
 
-                actividadesAdapter.setElements(actividades)
+
             }
 
             override fun onCancelled(error: DatabaseError) {
