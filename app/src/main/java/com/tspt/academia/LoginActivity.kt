@@ -75,6 +75,22 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
+        //Por rol del usuario
+        Firebase.database.reference.child("users").child(id).child("role").get()
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    println("Rol del usuario: ${it.result!!.value}")
+
+                    when(it.result!!.value.toString().toInt()){
+                        1 -> FirebaseMessaging.getInstance().subscribeToTopic("Administrador")
+                        2 -> FirebaseMessaging.getInstance().subscribeToTopic("Instructor")
+                        3 -> FirebaseMessaging.getInstance().subscribeToTopic("Responsable")
+                        4 -> FirebaseMessaging.getInstance().subscribeToTopic("Tutor")
+                        5 -> FirebaseMessaging.getInstance().subscribeToTopic("Alumno")
+                    }
+                }
+            }
+
     }
 
     private fun isLoggedIn(){
@@ -85,28 +101,15 @@ class LoginActivity : AppCompatActivity() {
             val db = Firebase.database.reference
             val user = db.child("users").child(auth.currentUser!!.uid)
 
+            getRole(Firebase.auth.currentUser!!.uid)
+
             user.get().addOnSuccessListener {
 
-                /*Utils.currentUser.email = it.child("email").getValue() as String
-                Utils.currentUser.date = it.child("date").getValue() as String
-                Utils.currentUser.name = it.child("nombre").getValue() as String
-                Utils.currentUser.telephone = it.child("telefono").getValue() as String
-                Utils.currentUser.role = (it.child("role").getValue() as Long).toInt()*/
+
 
                 var role = (it.child("role").getValue() as Long).toInt()
-                when(role) {
-                    1 -> {
-                        val intent = Intent(this, HomeAdminActivity::class.java)
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                        startActivity(intent)
-                    }
+                println("Rol del usuario es $role")
 
-                    else -> {
-                        val intent = Intent(this, HomeUsersActivity::class.java)
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                        startActivity(intent)
-                    }
-                }
 
 
             }.addOnFailureListener {
@@ -133,17 +136,20 @@ class LoginActivity : AppCompatActivity() {
             Utils.currentUser.role = (it.child("role").getValue() as Long).toInt()*/
 
             var role = (it.child("role").getValue() as Long).toInt()
+            println("El rol del usuario es: $role")
             when(role) {
                 1 -> {
-                    val intent = Intent(this, HomeAdminActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    startActivity(intent)
+                    println("Entra a Home Admin Activity")
+                    val ia = Intent(this, HomeAdminActivity::class.java)
+                    ia.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    startActivity(ia)
                 }
 
                 else -> {
-                    val intent = Intent(this, HomeUsersActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    startActivity(intent)
+                    println("Entra a Home Users Activity")
+                    val i = Intent(this, HomeUsersActivity::class.java)
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    startActivity(i)
                 }
             }
 

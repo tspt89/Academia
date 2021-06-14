@@ -9,5 +9,14 @@
         android:id="@+id/homeUsersFragment"
         android:name="com.tspt.academia.other_users.HomeUsersFragment"
         android:label="fragment_home_users"
-        tools:layout="@layout/fragment_home_users" />
+        tools:layout="@layout/fragment_home_users" >
+        <action
+            android:id="@+id/action_homeUsersFragment_to_actividadesFragment"
+            app:destination="@id/actividadesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/actividadesFragment"
+        android:name="com.tspt.academia.other_users.actividades.ActividadesFragment"
+        android:label="fragment_actividades"
+        tools:layout="@layout/fragment_actividades" />
 </navigation>
