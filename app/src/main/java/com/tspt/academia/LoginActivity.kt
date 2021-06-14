@@ -10,6 +10,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import com.tspt.academia.Administradores.HomeAdminActivity
 import com.tspt.academia.OtherUsers.HomeUsersActivity
 import com.tspt.academia.databinding.ActivityLoginBinding
@@ -25,6 +26,7 @@ class LoginActivity : AppCompatActivity() {
 
         title = "Authentication"
 
+
         isLoggedIn()
 
         binding.loginButton.setOnClickListener {
@@ -38,8 +40,8 @@ class LoginActivity : AppCompatActivity() {
                         if(it.isSuccessful){
                             Toast.makeText(this, "Login exitoso", Toast.LENGTH_LONG).show()
                             val uid = Firebase.auth.currentUser?.uid.toString()
+                            notificationSetup()
                             getRole(uid)
-
 
 
                         } else {
@@ -51,10 +53,37 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
+    private fun notificationSetup(){
+        val db = Firebase.database.reference
+        val id = Firebase.auth.currentUser?.uid.toString()
+        FirebaseMessaging.getInstance().token.addOnCompleteListener {
+            println("este es el token del dispositivo: ${it.result}")
+        }
+
+        //Registro por id del usuario
+        println("Email de este usuario: ${Firebase.auth.currentUser?.email} ${Firebase.auth.currentUser?.uid}")
+        FirebaseMessaging.getInstance().subscribeToTopic(id)
+
+        //En caso de tener actividades
+        db.child("users").child(id).child("actividades").get().addOnCompleteListener {
+            if(it.isSuccessful){
+                println("Resultado de la querie ${it.result!!.children.toList()}")
+                it.result!!.children.forEach {
+                    println("Actividades de este usuario: ${it.key} - ${it.value}")
+                    FirebaseMessaging.getInstance().subscribeToTopic(it.key.toString())
+                }
+            } else {
+                it.exception?.printStackTrace()
+            }
+        }
+
+    }
+
     private fun isLoggedIn(){
         val auth = Firebase.auth
 
         if(auth.currentUser != null){
+            notificationSetup()
             val db = Firebase.database.reference
             val user = db.child("users").child(auth.currentUser!!.uid)
 
