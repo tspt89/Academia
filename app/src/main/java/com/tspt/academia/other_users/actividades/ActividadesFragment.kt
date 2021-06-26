@@ -51,11 +51,13 @@ class ActividadesFragment : Fragment(R.layout.fragment_actividades) {
 
 
         val db = Firebase.database.reference.child("Actividades")
-        val listener = object  : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
 
-
-                snapshot.children.forEach {
+        db.get().addOnCompleteListener {
+            if(it.isSuccessful){
+                actividades.clear()
+                println("Todas las actividades")
+                println(it.result!!.children.toList())
+                it.result!!.children.forEach {
                     val id = it.key
                     if(act.contains(id)){
                         println("Si contiene la actividad")
@@ -75,6 +77,18 @@ class ActividadesFragment : Fragment(R.layout.fragment_actividades) {
                         actividades.add(Actividad(id,n,f,horaInicial,horaFinal,ak,ik))
                         actividadesAdapter.notifyDataSetChanged()
                     }
+                }
+            }
+        }
+
+
+
+        val listener = object  : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+
+
+                snapshot.children.forEach {
+
 
                 }
 
@@ -86,6 +100,6 @@ class ActividadesFragment : Fragment(R.layout.fragment_actividades) {
             }
         }
 
-        db.addValueEventListener(listener)
+
     }
 }

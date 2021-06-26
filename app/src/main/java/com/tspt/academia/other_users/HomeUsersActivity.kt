@@ -12,7 +12,8 @@ class HomeUsersActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_otherusers)
 
-        title = "Otros usuarios"
+
+        getRol()
     }
 
     private fun getRol(): Int {
